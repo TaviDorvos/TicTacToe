@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+
+    <!-- FAVICON -->
+    <link rel="icon" href="assets/images/tictactoe-icon.png" type="image" sizes="16x16">
+    <title>TicTacToe Game</title>
+</head>
+
+<body>
+    <div id="container-id" class="container">
+        <!-- Current Player -->
+        <div id="player">
+            <div><b>Current player:</b></div>
+            <div id="current-player"></div>
+        </div>
+        <br>
+        <!-- Gameboard -->
+        <div class="gameboard">
+            <div class="box"></div>
+            <div class="box"></div>
+            <div class="box"></div>
+            <div class="box"></div>
+            <div class="box"></div>
+            <div class="box"></div>
+            <div class="box"></div>
+            <div class="box"></div>
+            <div class="box"></div>
+        </div>
+    </div>
+
+    <!-- Win Messages -->
+    <div id="win-message">
+        <div id="x-win" class="d-none justify-content-center">Player X won the game!</div>
+        <div id="o-win" class="d-none justify-content-center">Player O won the game!</div>
+    </div>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="assets/js/script.js"></script>
+    <script src="bootstrap/js/jquery-3.5.1.min.js"></script>
+    <script src="bootstrap/js/bootstrap.js"></script>
+</body>
+
+</html>
