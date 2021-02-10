@@ -1,0 +1,36 @@
+.gameboard {
+    width: 500px;
+    height: 500px;
+    margin: 0 auto;
+    background-color: #0d8500;
+    color: #fff;
+    border: 5px solid #005703;
+    border-radius: 15px;
+    display: grid;
+    grid-template: repeat(3, 1fr) / repeat(3, 1fr);
+}
+
+.box {
+    border: 5px solid #005703;
+    border-radius: 15px;
+    font-weight: bold;
+    font-size: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#player {
+    margin: 0 auto;
+    width: 500px;
+}
+
+#win-message {
+    position: relative;
+    width: 500px;
+    margin: 0 auto;
+    top: -350px;
+    font-size: 40px;
+    font-weight: bold;
+    color: #000;
+}
