@@ -9,122 +9,120 @@ document.addEventListener('DOMContentLoaded', () => {
     //
 
     //Creating the matrix[3][3] 
-    //Create the boxes classes for the matrix in front
-    var gameboardDiv = document.querySelector("#gameboard");
-
     var gameboard = [];
     for (var i = 0; i < 3; i++) {
-
         gameboard.push([]);
-
         gameboard[i].push(new Array(3));
-
         for (var j = 0; j < 3; j++) {
-            var boxDiv = document.createElement("div");
-            boxDiv.setAttribute("class", "box");
-            boxDiv.addEventListener('click', clickOnBox);
-            gameboardDiv.appendChild(boxDiv);
             gameboard[i][j] = "";
         }
     }
 
     var currentPlayerDisplay = document.querySelector('#current-player');
+    var boxes = document.querySelectorAll('.box');
 
+    //For every box I click I call the function
+    boxes.forEach(box => {
+        box.addEventListener('click', clickOnBox);
+    })
+
+    var winner = '';
     var textX = 'X';
     var textO = 'O';
-
     var currentPlayer = 'playerX';
     currentPlayerDisplay.innerHTML = 'Player X';
 
+    //Checking who's turn it is and print the value(saving in the matrix too)
+    //Make the div unclickable
+    //Checking if the game is finished, verifying if it;s a draw or a win
     function clickOnBox(event) {
+        var row = this.id.charAt(0);
+        var column = this.id.charAt(1);
         if (currentPlayer === 'playerX') {
-            currentPlayer = 'playerO';
+            document.getElementById(this.id).innerHTML = textX;
             currentPlayerDisplay.innerHTML = 'Player O';
+            currentPlayer = 'playerO';
+            document.getElementById(this.id).style.pointerEvents = "none";
+            gameboard[row][column] = "X";
         } else {
-            currentPlayer = 'playerX';
+            document.getElementById(this.id).innerHTML = textO;
             currentPlayerDisplay.innerHTML = 'Player X';
+            currentPlayer = 'playerX';
+            document.getElementById(this.id).style.pointerEvents = "none";
+            gameboard[row][column] = "O";
+        }
+
+        //checking for win or draw
+        if (checkForWin()) {
+            if (winner == "X") {
+                document.getElementById("x-win").classList.add("d-flex");
+                document.getElementById("x-win").classList.remove("d-none");
+                document.getElementById("gameboard").style.opacity = "0.3";
+            } else if (winner == "O") {
+                document.getElementById("o-win").classList.add("d-flex");
+                document.getElementById("o-win").classList.remove("d-none");
+                document.getElementById("gameboard").style.opacity = "0.3";
+            }
+        } else if (checkForDraw()) {
+            document.getElementById("draw").classList.add("d-flex");
+            document.getElementById("draw").classList.remove("d-none");
+            document.getElementById("gameboard").style.opacity = "0.3";
         }
     }
 
-    // var boxes = document.querySelectorAll('.box');
-    // var currentPlayerDisplay = document.querySelector('#current-player');
+    //this function checks rows, columns and the diagonals for the win-conditions
+    function checkForWin() {
+        //WINS CASES
+        // [0, 1, 2]
+        // [3, 4, 5]
+        // [6, 7, 8]
+        // [0, 3, 6]
+        // [1, 4, 7]
+        // [2, 5, 8]
+        // [0, 4, 8]
+        // [2, 4, 6]
 
-    // var textX = 'X';
-    // var textO = 'O';
+        //checking the rows for win-condition
+        for (let i = 0; i < 3; i++) {
+            if (gameboard[i][0] == gameboard[i][1] && gameboard[i][1] == gameboard[i][2] && gameboard[i][1] != "") {
+                winner = gameboard[i][0];
+                return true;
+            }
+        }
 
-    // //For every box I click I call the function
-    // boxes.forEach(box => {
-    //     box.addEventListener('click', clickOnBox);
-    // })
+        //checking the rows for win-conditon
+        for (let j = 0; j < 3; j++) {
+            if (gameboard[0][j] == gameboard[1][j] && gameboard[1][j] == gameboard[2][j] && gameboard[0][j] != "") {
+                winner = gameboard[0][j];
+                return true;
+            }
+        }
 
-    // var currentPlayer = 'playerX';
-    // currentPlayerDisplay.innerHTML = 'Player X';
+        //checking the diagonals for win-condition
+        if (gameboard[0][0] == gameboard[1][1] && gameboard[1][1] == gameboard[2][2] && gameboard[0][0] != "") {
+            winner = gameboard[0][0];
+            return true;
+        }
 
-    // //Function which set the X or the O on the gameboard
-    // //Sets the name of the current player
-    // //Checks who is the winner
-    // function clickOnBox(event) {
-    //     var boxArray = Array.from(boxes);
-    //     var index = boxArray.indexOf(event.target);
+        if (gameboard[0][2] == gameboard[1][1] && gameboard[1][1] == gameboard[2][0] && gameboard[0][2] != "") {
+            winner = gameboard[0][2];
+            return true;
+        }
 
-    //     if (currentPlayer === 'playerX') {
-    //         boxArray[index].innerHTML = textX;
-    //         currentPlayer = 'playerO';
-    //         currentPlayerDisplay.innerHTML = 'Player O';
-    //         document.getElementById(index).style.pointerEvents = "none";
-    //     } else {
-    //         boxArray[index].innerHTML = textO;
-    //         currentPlayer = 'playerX';
-    //         currentPlayerDisplay.innerHTML = 'Player X';
-    //         document.getElementById(index).style.pointerEvents = "none";
-    //     }
+        return false;
+    }
 
-    //     //WINS CASES
-    //     // [0, 1, 2]
-    //     // [3, 4, 5]
-    //     // [6, 7, 8]
-    //     // [0, 3, 6]
-    //     // [1, 4, 7]
-    //     // [2, 5, 8]
-    //     // [0, 4, 8]
-    //     // [2, 4, 6]
-
-    //     for (let i = 0; i < boxArray.length; i += 3) {
-    //         // X WINS CASE
-    //         if (boxArray[i].innerHTML === textX && boxArray[i + 1].innerHTML === textX && boxArray[i + 2].innerHTML === textX) {
-    //             document.getElementById("x-win").classList.add("d-flex");
-    //             document.getElementById("x-win").classList.remove("d-none");
-    //             document.getElementById("gameboard").style.opacity = "0.3";
-    //             //O WINS CASE
-    //         } else if (boxArray[i].innerHTML === textO && boxArray[i + 1].innerHTML === textO && boxArray[i + 2].innerHTML === textO) {
-    //             document.getElementById("o-win").classList.add("d-flex");
-    //             document.getElementById("o-win").classList.remove("d-none");
-    //             document.getElementById("gameboard").style.opacity = "0.3";
-    //         }
-    //     }
-    //     // if (boxArray[0].innerHTML === textX && boxArray[1].innerHTML === textX && boxArray[2].innerHTML === textX ||
-    //     //     boxArray[3].innerHTML === textX && boxArray[4].innerHTML === textX && boxArray[5].innerHTML === textX ||
-    //     //     boxArray[6].innerHTML === textX && boxArray[7].innerHTML === textX && boxArray[8].innerHTML === textX ||
-    //     //     boxArray[0].innerHTML === textX && boxArray[3].innerHTML === textX && boxArray[6].innerHTML === textX ||
-    //     //     boxArray[1].innerHTML === textX && boxArray[4].innerHTML === textX && boxArray[7].innerHTML === textX ||
-    //     //     boxArray[2].innerHTML === textX && boxArray[5].innerHTML === textX && boxArray[8].innerHTML === textX ||
-    //     //     boxArray[0].innerHTML === textX && boxArray[4].innerHTML === textX && boxArray[8].innerHTML === textX ||
-    //     //     boxArray[2].innerHTML === textX && boxArray[4].innerHTML === textX && boxArray[6].innerHTML === textX) {
-    //     //     document.getElementById("x-win").classList.add("d-flex");
-    //     //     document.getElementById("x-win").classList.remove("d-none");
-    //     //     document.getElementById("container-id").style.opacity = "0.3";
-    //     //     //O WINS CASE
-    //     // } else if (boxArray[0].innerHTML === textX && boxArray[1].innerHTML === textX && boxArray[2].innerHTML === textX ||
-    //     //     boxArray[3].innerHTML === textO && boxArray[4].innerHTML === textO && boxArray[5].innerHTML === textO ||
-    //     //     boxArray[6].innerHTML === textO && boxArray[7].innerHTML === textO && boxArray[8].innerHTML === textO ||
-    //     //     boxArray[0].innerHTML === textO && boxArray[3].innerHTML === textO && boxArray[6].innerHTML === textO ||
-    //     //     boxArray[1].innerHTML === textO && boxArray[4].innerHTML === textO && boxArray[7].innerHTML === textO ||
-    //     //     boxArray[2].innerHTML === textO && boxArray[5].innerHTML === textO && boxArray[8].innerHTML === textO ||
-    //     //     boxArray[0].innerHTML === textO && boxArray[4].innerHTML === textO && boxArray[8].innerHTML === textO ||
-    //     //     boxArray[2].innerHTML === textO && boxArray[4].innerHTML === textO && boxArray[6].innerHTML === textO) {
-    //     //     document.getElementById("o-win").classList.add("d-flex");
-    //     //     document.getElementById("o-win").classList.remove("d-none");
-    //     //     document.getElementById("container-id").style.opacity = "0.3";
-    //     // }
-    // }
+    //this row checks if the all boxes are completed and initialized
+    //if every box is filled returns true(it's a draw), otherwise it continues
+    //until the win condition or a draw
+    function checkForDraw() {
+        for (let i = 0; i < 3; i++) {
+            for (let j = 0; j < 3; j++) {
+                if (gameboard[i][j] == "") {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
 });
